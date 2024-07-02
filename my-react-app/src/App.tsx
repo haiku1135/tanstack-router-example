@@ -8,11 +8,11 @@ function App() {
 
   return (
     <>
-      <h2 className="text-center text-3xl">新着スレッド</h2>
+      <h2 className="text-center text-3xl mt-4 mb-4">新着スレッド</h2>
       <ul className="text-center flex flex-col gap-4 mb-10">
         {threads?.map(thread => {
           return (
-            <li key={thread.id} className="text-2xl border max-w-[500px] mx-auto w-full p-4">{thread.title}</li>
+            <li key={thread.id} className="text-2xl border max-w-[500px] mx-auto w-full p-4"><a href={`/threads/${thread.id}`}>{thread.title}</a></li>
           )
         })}
       </ul>

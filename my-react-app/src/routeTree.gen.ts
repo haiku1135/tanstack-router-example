@@ -17,6 +17,7 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
+const ThreadsThreadIdLazyImport = createFileRoute('/threads/threadId')()
 const ThreadsNewLazyImport = createFileRoute('/threads/new')()
 
 // Create/Update Routes
@@ -25,6 +26,13 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const ThreadsThreadIdLazyRoute = ThreadsThreadIdLazyImport.update({
+  path: '/threads/threadId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/threads/threadId.lazy').then((d) => d.Route),
+)
 
 const ThreadsNewLazyRoute = ThreadsNewLazyImport.update({
   path: '/threads/new',
@@ -49,6 +57,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThreadsNewLazyImport
       parentRoute: typeof rootRoute
     }
+    '/threads/threadId': {
+      id: '/threads/threadId'
+      path: '/threads/threadId'
+      fullPath: '/threads/threadId'
+      preLoaderRoute: typeof ThreadsThreadIdLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -57,6 +72,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   ThreadsNewLazyRoute,
+  ThreadsThreadIdLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -68,7 +84,8 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/threads/new"
+        "/threads/new",
+        "/threads/threadId"
       ]
     },
     "/": {
@@ -76,6 +93,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/threads/new": {
       "filePath": "threads/new.lazy.tsx"
+    },
+    "/threads/threadId": {
+      "filePath": "threads/threadId.lazy.tsx"
     }
   }
 }

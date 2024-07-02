@@ -7,12 +7,17 @@ import {
   createRouter,
   createRoute,
   createRootRoute,
+  createFileRoute
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import  App  from './App';
 import NewThread from './NewThread';
+import Thread from './Thread';
 import { ThreadsProvider } from './providers/ThreadsProvider';
+import { useParams } from 'react-router-dom';
 
+
+const NotFoundComponent = () => <div>Page Not Found</div>;
 const rootRoute = createRootRoute({
   component: () => (
     <>
@@ -29,6 +34,7 @@ const rootRoute = createRootRoute({
       <TanStackRouterDevtools />
     </>
   ),
+  notFoundComponent: NotFoundComponent,
 })
 
 const indexRoute = createRoute({
@@ -53,9 +59,28 @@ const newThreadRoute = createRoute({
   },
 })
 
-const routeTree = rootRoute.addChildren([indexRoute, newThreadRoute])
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/threads/$threadId': any; // ここで any は適切なコンポーネントまたは型に置き換えてください
+  }
+}
 
-const router = createRouter({ routeTree })
+const threadRoute = createFileRoute('/threads/$threadId')({
+  loader: async ({ params }) => {
+    // ここで params.threadId を使用してデータをロードする
+    return { threadId: params.threadId };
+  },
+  component: function ThreadComponent() {
+    return (
+      <Thread  />
+    )
+  },
+})
+
+
+const routeTree = rootRoute.addChildren([indexRoute, newThreadRoute, threadRoute]);
+
+const router = createRouter({ routeTree });
 
 declare module '@tanstack/react-router' {
   interface Register {
