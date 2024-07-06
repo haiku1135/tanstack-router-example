@@ -13,25 +13,31 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as NewThreadRouteImport } from './routes/newThreadRoute'
 
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
-const ThreadsThreadIdLazyImport = createFileRoute('/threads/threadId')()
+const ThreadsThreadDetailLazyImport = createFileRoute('/threads/threadDetail')()
 const ThreadsNewLazyImport = createFileRoute('/threads/new')()
 
 // Create/Update Routes
+
+const NewThreadRouteRoute = NewThreadRouteImport.update({
+  path: '/newThreadRoute',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const ThreadsThreadIdLazyRoute = ThreadsThreadIdLazyImport.update({
-  path: '/threads/threadId',
+const ThreadsThreadDetailLazyRoute = ThreadsThreadDetailLazyImport.update({
+  path: '/threads/threadDetail',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/threads/threadId.lazy').then((d) => d.Route),
+  import('./routes/threads/threadDetail.lazy').then((d) => d.Route),
 )
 
 const ThreadsNewLazyRoute = ThreadsNewLazyImport.update({
@@ -50,6 +56,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/newThreadRoute': {
+      id: '/newThreadRoute'
+      path: '/newThreadRoute'
+      fullPath: '/newThreadRoute'
+      preLoaderRoute: typeof NewThreadRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/threads/new': {
       id: '/threads/new'
       path: '/threads/new'
@@ -57,11 +70,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ThreadsNewLazyImport
       parentRoute: typeof rootRoute
     }
-    '/threads/threadId': {
-      id: '/threads/threadId'
-      path: '/threads/threadId'
-      fullPath: '/threads/threadId'
-      preLoaderRoute: typeof ThreadsThreadIdLazyImport
+    '/threads/threadDetail': {
+      id: '/threads/threadDetail'
+      path: '/threads/threadDetail'
+      fullPath: '/threads/threadDetail'
+      preLoaderRoute: typeof ThreadsThreadDetailLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -71,8 +84,9 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  NewThreadRouteRoute,
   ThreadsNewLazyRoute,
-  ThreadsThreadIdLazyRoute,
+  ThreadsThreadDetailLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -84,18 +98,22 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/newThreadRoute",
         "/threads/new",
-        "/threads/threadId"
+        "/threads/threadDetail"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
+    "/newThreadRoute": {
+      "filePath": "newThreadRoute.tsx"
+    },
     "/threads/new": {
       "filePath": "threads/new.lazy.tsx"
     },
-    "/threads/threadId": {
-      "filePath": "threads/threadId.lazy.tsx"
+    "/threads/threadDetail": {
+      "filePath": "threads/threadDetail.lazy.tsx"
     }
   }
 }

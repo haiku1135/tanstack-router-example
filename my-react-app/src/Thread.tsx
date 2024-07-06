@@ -9,11 +9,11 @@ function Thread() {
   const { threadId } = useParams();
   // スレッドのIDが一致するスレッドを取得
   const thread = threads.find(thread => thread.id === threadId);
-
+  const BASE_URL = 'https://railway.bulletinboard.techtrain.dev';
   const [posts, setPosts] = useState();
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`http://localhost:3000/threads/${threadId}`);
+      const response = await fetch(`${BASE_URL}/threads/${threadId}/posts`);
       const data = await response.json();
       setPosts(data);
     }

@@ -14,11 +14,19 @@ import  App  from './App';
 import NewThread from './NewThread';
 import Thread from './Thread';
 import { ThreadsProvider } from './providers/ThreadsProvider';
-import { useParams } from 'react-router-dom';
+import { BrowserRouter, useParams } from 'react-router-dom';
+import { newThreadRoute } from './routes/newThreadRoute'
+import { threadRoute } from './routes/threads/threadDetail.lazy'
+import {
+  postsRoute,
+  postsIndexRoute,
+  postRoute
+} from './routes/posts/postsIndexRoute'
 
 
 const NotFoundComponent = () => <div>Page Not Found</div>;
-const rootRoute = createRootRoute({
+
+export const rootRoute = createRootRoute({
   component: () => (
     <>
       <header className="p-4 h-24 flex gap-2 bg-slate-400 justify-between items-center text-white">
@@ -37,7 +45,7 @@ const rootRoute = createRootRoute({
   notFoundComponent: NotFoundComponent,
 })
 
-const indexRoute = createRoute({
+export const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: function Index() {
@@ -49,36 +57,12 @@ const indexRoute = createRoute({
   },
 })
 
-const newThreadRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/threads/new',
-  component: function NewThreadComponent() {
-    return (
-      <NewThread />
-    )
-  },
-})
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/threads/$threadId': any; // ここで any は適切なコンポーネントまたは型に置き換えてください
-  }
-}
-
-const threadRoute = createFileRoute('/threads/$threadId')({
-  loader: async ({ params }) => {
-    // ここで params.threadId を使用してデータをロードする
-    return { threadId: params.threadId };
-  },
-  component: function ThreadComponent() {
-    return (
-      <Thread  />
-    )
-  },
-})
-
-
-const routeTree = rootRoute.addChildren([indexRoute, newThreadRoute, threadRoute]);
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  threadRoute,
+  newThreadRoute, 
+]);
 
 const router = createRouter({ routeTree });
 
@@ -93,6 +77,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
+      {/* グローバルでスレッドを管理するためのProviderを設定 */}
       <ThreadsProvider>
         <RouterProvider router={router} />
       </ThreadsProvider>
