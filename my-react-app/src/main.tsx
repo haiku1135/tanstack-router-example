@@ -7,21 +7,13 @@ import {
   createRouter,
   createRoute,
   createRootRoute,
-  createFileRoute
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import  App  from './App';
-import NewThread from './NewThread';
-import Thread from './Thread';
 import { ThreadsProvider } from './providers/ThreadsProvider';
-import { BrowserRouter, useParams } from 'react-router-dom';
 import { newThreadRoute } from './routes/newThreadRoute'
 import { threadRoute } from './routes/threads/threadDetail.lazy'
-import {
-  postsRoute,
-  postsIndexRoute,
-  postRoute
-} from './routes/posts/postsIndexRoute'
+
 
 
 const NotFoundComponent = () => <div>Page Not Found</div>;

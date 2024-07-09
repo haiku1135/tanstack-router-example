@@ -32,7 +32,7 @@ const PostsComponent = () => {
 
 
   // inputの値をStateに保存 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
 
@@ -79,7 +79,7 @@ const PostsComponent = () => {
         </div>
         <div className='mt-8'>
           <form className='flex flex-row gap-4' onSubmit={handleSubmit}>
-            <input className='border rounded-sm' type="text" value={comment} onChange={handleChange} required maxLength={100} />
+            <textarea className='border rounded-sm' value={comment} onChange={(e) => handleChange(e)} required maxLength={100} />
             <button className='bg-blue-500 text-white px-2 py-1 rounded-sm' type="submit" >投稿</button>
           </form>
         </div>
